@@ -1,15 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import ThemeContext from "./ThemeContext";
 import useBreedList from "./useBreedList";
 import Results from "./Results";
 
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
-  const [location, setLocation] = useState("Seattle, WA");
+  const [location, setLocation] = useState("");
   const [animal, setAnimal] = useState("");
   const [breed, setBreed] = useState("");
   const [pets, setPets] = useState([]);
   const [breeds] = useBreedList(animal);
+  const [theme, setTheme] = useContext(ThemeContext);
 
   useEffect(() => {
     requestPets();
@@ -39,7 +41,6 @@ const SearchParams = () => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Location"
-            required
           />
         </label>
 
@@ -51,7 +52,6 @@ const SearchParams = () => {
             value={animal}
             onChange={(e) => setAnimal(e.target.value)}
             onBlur={(e) => setAnimal(e.target.value)}
-            required
           >
             <option value="Select Animal Type" />
             {ANIMALS.map((animal) => (
@@ -71,7 +71,6 @@ const SearchParams = () => {
             value={breed}
             onChange={(e) => setBreed(e.target.value)}
             onBlur={(e) => setBreed(e.target.value)}
-            required
           >
             <option />
             {breeds.map((breed) => (
@@ -81,7 +80,25 @@ const SearchParams = () => {
             ))}
           </select>
         </label>
-        <button type="submit">Submit</button>
+
+        <label htmlFor="theme">
+          Theme
+          <select
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            onBlur={(e) => setTheme(e.target.value)}
+          >
+            <option value="darkblue">Darkblue</option>
+            <option value="peru">Peru</option>
+            <option value="mediumorchid">Mediumorchid</option>
+            <option value="chartreuse">Chartreuse</option>
+            <option value="#b60098">Solid Pink</option>
+          </select>
+        </label>
+
+        <button style={{ backgroundColor: theme }} type="submit">
+          Submit
+        </button>
       </form>
       <Results pets={pets} />
     </div>
